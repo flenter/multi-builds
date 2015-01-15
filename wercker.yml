@@ -1,0 +1,15 @@
+box: wercker/python
+build:
+    steps:
+        - script:
+            name: "unit test"
+            code: |
+                echo "Look.. unit tests!"
+
+        - script:
+            name: "prepare for integration test"
+            code: |
+                COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+                git checkout -b "$WERCKER_GIT_BRANCH-integration"
+                cp integration-wercker.yml wercker.yml
+                git commit -a -m "integration test: \n $COMMIT_MESSAGE " 
