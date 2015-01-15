@@ -1,0 +1,10 @@
+box: wercker/python
+services: 
+    - wercker/mongodb
+build:
+    steps:
+        - script:
+            name: "unit test"
+            code: |
+                echo "Look.. integration tests"
+
