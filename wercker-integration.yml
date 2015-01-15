@@ -1,4 +1,6 @@
 box: wercker/python
+services: 
+    - wercker/mongodb
 build:
     steps:
         - script:
