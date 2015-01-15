@@ -9,7 +9,18 @@ build:
         - script:
             name: "prepare for integration test"
             code: |
-                COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+                GIT_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+                GIT_NAME=$(git log -1 --pretty=%cN)
+                GIT_EMAIL=$(git log -1 --pretty=%cE)
+                INTEGRATION_BRANCH=$(echo "$WERCKER_GIT_BRANCH-integration")
+                rm -rf .git
+                git init
+                git config --global user.email "$GIT_EMAIL"
+                git config --global user.name "$GIT_NAME"
                 git checkout -b "$WERCKER_GIT_BRANCH-integration"
-                cp integration-wercker.yml wercker.yml
-                git commit -a -m "integration test: \n $COMMIT_MESSAGE " 
+                cp wercker-integration.yml wercker.yml
+                git add .
+                git commit -a -m "integration test: $GIT_COMMIT_MESSAGE" 
+                git remote add origin $GIT_REMOTE
+                git push -f origin $INTEGRATION_BRANCH:$INTEGRATION_BRANCH
+
